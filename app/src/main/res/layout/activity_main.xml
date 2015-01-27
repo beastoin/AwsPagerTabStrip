@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    >
+
+    <FrameLayout
+        android:id="@+id/pager_tabstrip_container"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#f1f1f1"
+        >
+
+        <aws.pagertabstrip.TextPagerTabStrip
+            android:id="@+id/tabstrip"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            >
+
+        </aws.pagertabstrip.TextPagerTabStrip>
+
+    </FrameLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/pager_tabstrip_container"
+        android:background="#f1f100">
+
+    </android.support.v4.view.ViewPager>
+</RelativeLayout>

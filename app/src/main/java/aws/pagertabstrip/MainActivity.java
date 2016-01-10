@@ -1,5 +1,6 @@
 package aws.pagertabstrip;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
@@ -23,7 +24,6 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity
 {
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity
         tabStrip.setPager(pager, new TitlePagerTabStripAdapter());
     }
 
+    @SuppressLint ("ValidFragment")
     class TextFragment extends Fragment
     {
         String mText;

@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
         pager.setAdapter(new TextPagerAdapter(getSupportFragmentManager()));
 
         PagerTabStrip tabStrip = (PagerTabStrip) findViewById(R.id.tabstrip);
+        tabStrip.setItemViewType(PagerTabStripType.WRAP);
         tabStrip.setPager(pager, new TitlePagerTabStripAdapter());
     }
 

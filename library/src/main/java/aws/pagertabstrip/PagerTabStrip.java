@@ -2,15 +2,19 @@ package aws.pagertabstrip;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import aws.pagertabstrip.lib.R;
 
 /**
  * Created by thinh on 12/27/15.
@@ -25,6 +29,7 @@ public class PagerTabStrip extends RelativeLayout
     PagerTabStripViewItem mSelectedTabStripView;
     //View mSlidingBar;
 
+    PagerTabStripType mType = PagerTabStripType.WRAP;
 
     public PagerTabStrip(Context context)
     {
@@ -36,12 +41,14 @@ public class PagerTabStrip extends RelativeLayout
     {
         super(context, attrs);
         init(context);
+        bindAttributes(context, attrs);
     }
 
     public PagerTabStrip(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super(context, attrs, defStyleAttr);
         init(context);
+        bindAttributes(context, attrs);
     }
 
     @TargetApi (Build.VERSION_CODES.LOLLIPOP)
@@ -49,6 +56,7 @@ public class PagerTabStrip extends RelativeLayout
     {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
+        bindAttributes(context, attrs);
     }
 
     private void init(Context context)
@@ -77,9 +85,36 @@ public class PagerTabStrip extends RelativeLayout
             mScrollView.getViewTreeObserver().addOnScrollChangedListener(this);
         }
 
+        mScrollView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener()
+                {
+                    @Override
+                    public void onGlobalLayout()
+                    {
+                        updateChildViewLayout();
+                    }
+                });
+
         mScrollView.addView(mContainerView);
         addView(mScrollView);
         //addView(mSlidingBar);
+    }
+
+    private void bindAttributes(Context context, AttributeSet attrs)
+    {
+        /*
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.PieChart,
+                0, 0);
+
+        try {
+            mShowText = a.getBoolean(R.styleable.PieChart_showText, false);
+            mTextPos = a.getInteger(R.styleable.PieChart_labelPosition, 0);
+        } finally {
+            a.recycle();
+        }
+        */
     }
 
     protected View initSlidingBar(Context context)
@@ -220,6 +255,32 @@ public class PagerTabStrip extends RelativeLayout
         });
     }
 
+    private void updateChildViewLayout()
+    {
+        switch (mType)
+        {
+            case WRAP:
+                break;
+
+            case TILE:
+                int itemWidth = mScrollView.getWidth() / mContainerView.getChildCount();
+                for (int i = 0; i < mContainerView.getChildCount(); i++)
+                {
+                    PagerTabStripViewItem item = (PagerTabStripViewItem) mContainerView.getChildAt(i);
+                    if (itemWidth - item.getWidth() == 0)
+                        continue;
+
+                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) item.getLayoutParams();
+                    lp.width = itemWidth;
+                    item.setLayoutParams(lp);
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+
     private void destroy()
     {
         this.mPager.removeOnPageChangeListener(this);
@@ -227,5 +288,10 @@ public class PagerTabStrip extends RelativeLayout
         {
             mScrollView.getViewTreeObserver().removeOnScrollChangedListener(this);
         }
+    }
+
+    public void setItemViewType(PagerTabStripType type)
+    {
+        mType = type;
     }
 }
